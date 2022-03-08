@@ -13,7 +13,6 @@ describe("Registration test", () => {
 
   //Load register page
   beforeEach("visit Register page", () => {
-    cy.wait(5000);
     cy.visit("/Register");
     cy.url().should('contain', '/Register')
   });
@@ -24,6 +23,9 @@ describe("Registration test", () => {
     registerPage.registerButton.click();
 
     cy.get('.field-validation-error').should('include.text', 'Ime je potrebno')
+    cy.get('.input-validation-error').then(($input) => {
+      expect($input[0].value).to.be.empty
+    })
   })
 
 
@@ -33,6 +35,9 @@ describe("Registration test", () => {
     registerPage.registerButton.click();
 
     cy.get('.field-validation-error').should('include.text', 'Prezime je potrebno.')
+    cy.get('.input-validation-error').then(($input) => {
+      expect($input[0].value).to.be.empty
+    })
   })
 
   //Negative test with empty form
@@ -43,6 +48,9 @@ describe("Registration test", () => {
     cy.get('.field-validation-error').should('include.text', 'Prezime je potrebno.')
     cy.get('.field-validation-error').should('include.text', 'Elektronska pošta je potrebna')
     cy.get('.field-validation-error').should('include.text', 'Lozinka je potrebna.')
+    cy.get('.input-validation-error').then(($input) => {
+      expect($input[0].value).to.be.empty
+    })
   })
 
   //Negative test without Lozinka
@@ -56,18 +64,23 @@ describe("Registration test", () => {
 
   //Negative test "Lozinka" with 5 characters all letters
   it("Register user Lozinka  with 5 characters all letters", () => {
-    registerPage.registerUserPasswordWith5char(userData.randomName, userData.randomName, userData.randomPassword, '12345', '12345')
+    registerPage.registerUserPasswordWith5char(userData.randomName, userData.randomName, userData.randomEmail, '12345', '12345')
     registerPage.registerButton.click();
 
     cy.get('.field-validation-error').should('include.text', 'Lozinka treba imati najmanje 6 znakova.')
+    cy.get('.input-validation-error').then(($input) => {
+      expect($input[0].value).not.to.be.empty
+    })
   })
-
   //Negative test 'Lozinka' and 'Potvrdite lozinku' password doesn't match
   it("Register user with 'Lozinka' and 'Potvrdite lozinku' password doesn't match", () => {
     registerPage.registerUserPasswordAndConfPasswordDoesNotMatch(userData.randomName, userData.randomName, userData.randomEmail, userData.randomPassword, '123456')
     registerPage.registerButton.click();
 
     cy.get('.field-validation-error').should('include.text', 'Lozinka i potvrda lozinke se ne podudaraju.')
+    cy.get('input#Password').invoke('val').then(password => {
+      cy.get('input#ConfirmPassword').should('not.have.value', password)
+    })
   })
 
   //Negative test Email validation - email without ".com"
@@ -195,11 +208,11 @@ describe("Registration test", () => {
     cy.get('.field-validation-error').should('include.text', 'Neispravan unos telefona')
   })
 
-    //negative test as "Pravna osoba" with invalid company Telephone and email///////////////////////BUG
+  //negative test as "Pravna osoba" with invalid company Telephone and email///////////////////////BUG
   it("Register Pravna osoba with invalid data Telephone company and email company", () => {
     registerPage.registerAsCompany.check();
     registerPage.registerPravnaOsobaWithNonRequireFields('12345678911', 'jsj.com', 'sssssss', userData.randomName,
-     'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Gs33uillermosskkkk@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
+      'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Gs33uillermosskkkk@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
     registerPage.registerButton.click();
 
     cy.get('.field-validation-error').should('include.text', 'Pogrešan e-mail')
@@ -221,7 +234,7 @@ describe("Registration test", () => {
   it("Register Pravna osoba with valid data with non required fields", () => {
     registerPage.registerAsCompany.check();
     registerPage.registerPravnaOsobaWithNonRequireFields('12345678911', 'jsjsj@djdjjd.com', '+381 604619900', userData.randomName,
-     'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Guillermo8s3@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
+      'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Guillermo8s3@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
     registerPage.registerButton.click();
 
     cy.get('.result').should('include.text', 'Poslan vam je e-mail koji sadrži upute za aktivaciju članstva.')
