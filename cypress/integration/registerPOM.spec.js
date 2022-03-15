@@ -221,10 +221,13 @@ describe("Registration test", () => {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //NOTE:
+// Faker uses various types of email. We need to use hard-code email for a positive test. Also, we should change the email every time when run tests
+  
   //positive test as "Pravna osoba"
   it("Register Pravna osoba with valid data ", () => {
     registerPage.registerAsCompany.check();
-    registerPage.registerPravnaOsoba('12345678911', 'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'GuillermoHdaasadduedffsffls83@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
+    registerPage.registerPravnaOsoba('12345678911', 'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'GuillerdaademoHdaasadduedffsffls83@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
     registerPage.registerButton.click();
 
     cy.get('.result').should('include.text', 'Poslan vam je e-mail koji sadrži upute za aktivaciju članstva.')
@@ -234,7 +237,7 @@ describe("Registration test", () => {
   it("Register Pravna osoba with valid data with non required fields", () => {
     registerPage.registerAsCompany.check();
     registerPage.registerPravnaOsobaWithNonRequireFields('12345678911', 'jsjsj@djdjjd.com', '+381 604619900', userData.randomName,
-      'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Guillermo8s3@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
+      'Banatska 10', 'Novi Sad', userData.randomName, userData.randomName, 'Guillermdssaero8s3@gmail.com', userData.randomPassword, userData.randomPassword, userData.randomName)
     registerPage.registerButton.click();
 
     cy.get('.result').should('include.text', 'Poslan vam je e-mail koji sadrži upute za aktivaciju članstva.')
@@ -242,7 +245,7 @@ describe("Registration test", () => {
   })
   // Positive test as Personal user
   it("Register Personal user with valid data", () => {
-    registerPage.registerPersonal(userData.randomName, userData.randomName, 'GuisssllermdddoassaffffHuels83@gmail.com', userData.randomPassword, userData.randomPassword)
+    registerPage.registerPersonal(userData.randomName, userData.randomName, 'GuisssllermdssssddoasdddssssaffffHuels83@gmail.com', userData.randomPassword, userData.randomPassword)
     registerPage.registerButton.click();
 
     cy.get('.result').should('include.text', 'Poslan vam je e-mail koji sadrži upute za aktivaciju članstva.')
@@ -250,7 +253,7 @@ describe("Registration test", () => {
   })
   // Positive test as Personal user with non required fields
   it("Register Personal user with valid data and non required fields", () => {
-    registerPage.registerPersonalWithNonRequireFields(userData.randomName, userData.randomName, 'GuillesdsdsrmoHsssusels83@gmail.com', userData.randomName,
+    registerPage.registerPersonalWithNonRequireFields(userData.randomName, userData.randomName, 'GuillesdsddsdsrmoHsssusels83@gmail.com', userData.randomName,
       'Novi Sad', '+381 604619900', userData.randomPassword, userData.randomPassword)
     registerPage.dateBirth.select('2').invoke('val');
     registerPage.monthBirth.select('veljača').invoke('val');
