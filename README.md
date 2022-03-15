@@ -12,7 +12,10 @@
 
 #install faker: npm install @faker-js/faker --save-dev
 
+# use registerPOM.spec.js tests
+
 #if you would run specific test(s) you need to put .only
 example:
 
  it.only("Register user without first name", () => {.....
+
